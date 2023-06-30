@@ -29,6 +29,7 @@ async function bootstrap() {
   await app.listen(3000);
 
   logger.log(`Running on ${await app.getUrl()}`);
+  logger.log(`See the documentation please open: ${await app.getUrl()}/api`);
 }
 
 bootstrap();

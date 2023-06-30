@@ -3,7 +3,9 @@ import { IsString } from 'class-validator';
 
 export class GenerateImageDto {
   @IsString()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Size of the image (small, medium, or large)',
+  })
   size: string;
 
   @IsString()

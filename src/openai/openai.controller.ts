@@ -2,13 +2,14 @@ import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { GenerateImageDto } from './dtos/generate-image.dto';
 import { openai } from './config/openai.config';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('/')
 @ApiTags('Openai-controller')
 export class OpenaiController {
   @Post('generate-image')
   @ApiOperation({ description: 'Generate a random image' })
+  @ApiBody({ type: GenerateImageDto })
   @ApiResponse({ status: 200, description: 'Image Upload Successful!' })
   @ApiResponse({ status: 400, description: 'The image could be not generated' })
   async generateImage(
@@ -25,13 +26,13 @@ export class OpenaiController {
         : '1024x1024';
 
     try {
-      const result = openai().createImage({
+      const result = await openai().createImage({
         prompt,
         n: 1,
         size: imageSize,
       });
 
-      const imageUrl = (await result).data.data[0].url;
+      const imageUrl = result.data.data[0].url;
 
       return res.status(HttpStatus.OK).json({
         message: 'Image Upload Successful!',
